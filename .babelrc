@@ -1,0 +1,22 @@
+{
+  "presets": [
+    "env",
+    "react"
+  ],
+  "plugins": [
+    "syntax-dynamic-import",
+    "transform-class-properties",
+    "transform-object-rest-spread",
+    ["module-resolver", {
+      "extensions": [".js", ".jsx"],
+      "root": ["./src"]
+    }]
+  ],
+  "env": {
+    "development": {
+      "plugins": [
+        "react-hot-loader/babel"
+      ]
+    }
+  }
+}
