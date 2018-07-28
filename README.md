@@ -101,25 +101,25 @@ describe('<Button />', () => {
 })
 ````
 
-> **Differences between `mount`, `shallow` and `render`**
->
-> * `mount` renders child components
+**Differences between `mount`, `shallow` and `render`**
+
+* `mount` renders child components
   * This is ideal for use cases where you have components that may interact with DOM API, or use React lifecycles methods in order to fully test the component
   * As it actually mounts the component in the DOM `.unmount()` should be called after each tests to stop tests affecting each other
   * Allows access to both props directly passed into the root component (including default props) and props passed into child components
->
->
-> * `shallow` renders only the single component, not including its children
+
+
+* `shallow` renders only the single component, not including its children
   * This is useful to isolate the component for pure unit testing. It protects against changes or bugs in a child component altering the behaviour or output of the component under test
   * Components do have access to lifecycle methods by default (Enzyme 3)
   * Cannot access props passed into the root component (therefore also not default props), but can those passed into child components, and can test the effect of props passed into the root component. This is as with `shallow(<MyComponent />)`, you're testing what `MyComponent` renders - not the element you passed into `shallow`
->
->  
-> * `render` renders to static HTML, including children
+
+
+* `render` renders to static HTML, including children
   * Does not have access to React lifecycle methods
   * Less costly than `mount` but provides less functionality
->
-> Source: [Testing React with Jest and Enzyme](https://medium.com/codeclan/testing-react-with-jest-and-enzyme-20505fec4675)
+
+Source: [Testing React with Jest and Enzyme](https://medium.com/codeclan/testing-react-with-jest-and-enzyme-20505fec4675)
 
 #### UI Testing
 
