@@ -221,7 +221,7 @@ Event handlers should:
 
 ### Linting
 
-Linting is done with [`ESLint`](https://eslint.org) and can be executed manually with `yarn test`. Even though it's automatically executed before every commit (thanks to `husky`'s `precommit` hook), installing an ESLint plugin for your IDE is highly recommended.
+Linting is done with [`ESLint`](https://eslint.org) and can be executed manually with `yarn lint`. Even though it's automatically executed before every commit (thanks to `husky`'s `precommit` hook), installing an ESLint plugin for your IDE is highly recommended.
 
 The configuration is based on `eslint-config-airbnb`, with some additional rules and plugins. Please refer to `.eslintrc.json` for more information.
 
@@ -325,7 +325,7 @@ This boilerplate uses [`Storybook`](https://github.com/storybooks/storybook) to 
 
 * [`notes`](https://github.com/storybooks/storybook/tree/release/3.4/addons/notes) to ... write notes
 
-**Each Presentational Component** (as defined in the [Guidelines](#Guidelines)) **should have a file containing a set of stories** (ie. a set of *states* of the component) named after the component that end with `.stories.jsx`, located right next to this component.
+**Each Presentational Component** (as defined in the [Guidelines](#guidelines)) **should have a file containing a set of stories** (ie. a set of *states* of the component) named after the component that end with `.stories.jsx`, located right next to this component.
 
 Assuming we have a `Button` component in `src/components/Button`, here's how to write a story:
 
