@@ -5,7 +5,10 @@
 * [Features](#features)
 * [Scripts](#scripts)
 * [Guidelines](#guidelines)
-  * Folders organization :construction:
+  * [Folders organization](#folders-organization)
+  * [Components](#components)
+  * [Redux](#redux)
+  * [Naming things](#naming-things)
 * [Development](#development)
   * Logging :construction:
   * [Linting](#linting)
@@ -20,6 +23,8 @@
 ## Features
 
 * [`React`](https://github.com/facebook/react)
+* [`Redux`](https://github.com/reduxjs/redux) and [`React-Redux`](https://github.com/reduxjs/react-redux) to manage the state
+* [`Reselect`](https://github.com/reduxjs/reselect) to build memoized selectors
 
 ## Scripts
 
@@ -41,6 +46,176 @@ Useful resources:
 * [The 100% correct way to structure a React app (or why there’s no such thing)](https://hackernoon.com/the-100-correct-way-to-structure-a-react-app-or-why-theres-no-such-thing-3ede534ef1ed)
 * [Clean Code saves Devs](https://developers.caffeina.com/clean-code-saves-devs-the-caffeina-approach-to-reactjs-1b56ad15aa64)
 * [5 common practices that you can stop doing in React](https://blog.logrocket.com/5-common-practices-that-you-can-stop-doing-in-react-9e866df5d269)
+
+### Folders organization
+
+````
+src/
+  components/         # Presentational components
+  containers/         # Container components
+  services/           # Redux modules
+  configureStore.js   # store configuration
+  index.jsx           # app entrypoint
+  index.template.html # HTML template (for webpack)
+````
+
+### Components
+
+**Separate components into Container (smart) and Presentational (dumb) component types.**
+
+&nbsp; | Container Components | Presentational Components
+---: | --- | ---
+**Location** | top level, route handlers | middle + leaf components
+**Aware of Redux** | Yes | No
+**Reading Data** | subscribe to Redux State | From props
+**Changing Data** | dispatch Redux actions | invoke callbacks from props
+
+Container and Presentational components are separated into separate, top-level folders in the `src` folder; with each component getting its own folder.
+
+````
+src/
+  components/
+    Button/
+      tests/
+        Button.test.jsx
+      Button.jsx
+      Button.stories.jsx
+      index.js
+    ...
+
+  containers/
+    App/
+      components/
+        Main/
+          tests/
+            Main.test.jsx
+          index.js
+          Main.jsx
+      tests/
+        App.test.jsx
+      App.jsx
+      index.js
+    ...
+````
+
+These component folders could even potentially contain sub-component folders organized the same way if those sub-components:
+* are directly related to or composed by the main component
+* are not used elsewhere
+
+In each case, the `index.js` file is basically a rollup file to allow easier autoloading of the component module (that's why they are not included in the coverage - see `jest.config.js`).
+
+````js
+// src/components/Button/index.js
+
+import Button from './Button'
+
+export default Button
+````
+
+For every component, you should follow some basic rules:
+
+* **Keep it small**: Keeping components small maximizes their potential for reuse, reduces the chance for bugs, allows them to focus on a single reponsibility and improves readability and testing. *If the render method has more than 10-20 lines, it's probably way too big.*
+
+* **One per file**: You should try to put each component in its own file to ensure they are easier to read, maintain and test.
+
+* **Declare `propTypes` and `defaultProps`**: propTypes are a form of documentation, and providing defaultProps means the reader of your code doesn’t have to assume as much.
+
+Components name should follow pascal case (eg. `CommentList`).
+
+#### Container components
+
+* Are concerned with **how things work**
+
+* May contain both presentational and container components inside but **usually don’t have any DOM markup of their own** except for some wrapping divs, and never have any styles
+
+* Provide the data and behavior to presentational or other container components
+
+* Call Redux actions and provide these as callbacks to the presentational components
+
+For testing purposes, **export both the connected** (as default) **and non-connected component** (as named export).
+
+#### Presentational components
+
+* Are concerned with **how things look**
+
+* May contain both presentational and container components inside, and **usually have some DOM markup and styles of their own**
+
+* Often allow containment/composition via `this.props.children`
+
+* Have no dependencies on the rest of the app, such as Redux actions or state
+
+* Don’t specify how the data is loaded or mutated
+
+* Receive data and callbacks exclusively via props
+
+* Rarely have their own state (when they do, it’s UI state rather than data)
+
+* Should be written as functional components unless they need state, lifecycle hooks, or performance optimizations
+
+### Redux
+
+**Co-locate reducers, actions, action types and selectors**: organizing your redux related code around the reducer (*the slice of store state it manages*) by bundling your actions, action types and selectors with the reducer helps organize your code into reusable modules.
+
+A redux module should be organized as follows:
+
+````
+src/services/
+  basic/
+    tests/
+      actions.test.js
+      reducer.test.js
+      selectors.test.js
+    actions.js    # named exports of action creators
+    reducer.js    # default export reducer
+    selectors.js  # named exports of selectors
+    types.js      # named exports of action types constants
+````
+
+#### Reducers
+
+**Keep reducers pure, with no side-effects**: reducers should be pure functions. Redux works on the assumption that your state is immutable; and a reducer is intended to accept a state along with an action and return a new state (or the exact same state if nothing has changed).
+
+#### Action creators
+
+Action creators should be written in camel case and begin with a verb (eg. `fetchCurrentUser`).
+
+#### Action types
+
+**Use string constants instead of inline strings** for action types. They should be uppercase, written in snake case and end with a verb.
+
+Using a prefix for the action types based on the reducer they work with is a good way to namespace action types and ensure you don't get any collisions across reducers. **Prefixes should begin with `@@` and be lowercase**.
+
+````js
+// src/services/basic/types.js
+
+export const FOO_UPDATE = '@@basic/FOO_UPDATE'
+````
+
+#### Selectors
+
+Selectors should be written in camel case and begin with *select* (eg. `selectCurrentUser`).
+
+### Naming things
+
+#### General
+
+* Boolean variables, or functions that return a boolean value, should start with `is`, `has` or `should`
+* Functions should be named for what they do, not how they do it
+
+#### Event and event handlers
+
+Event names should:
+
+* be written in camel case
+* begin with `on`
+* not clash with native event names
+
+Event handlers should:
+
+* be written in camel case
+* begin with `handle`
+* end with the name of the event they handle (eg. `Click`, `Move`...)
+* be present-tense
 
 ## Development
 
@@ -101,6 +276,19 @@ describe('<Button />', () => {
 })
 ````
 
+For Container Components, you should import the named export to test the component itself and not the Redux-decorated one (as Redux is already tested).
+
+````js
+// src/containers/App/tests/App.test.jsx
+
+import React from 'react'
+import { shallow } from 'enzyme'
+
+import { App } from '../App' // We import the component itself, not the connected one
+
+...
+````
+
 **Differences between `mount`, `shallow` and `render`**
 
 * `mount` renders child components
@@ -120,6 +308,14 @@ describe('<Button />', () => {
   * Less costly than `mount` but provides less functionality
 
 Source: [Testing React with Jest and Enzyme](https://medium.com/codeclan/testing-react-with-jest-and-enzyme-20505fec4675)
+
+##### Redux
+
+@TODO: Write about action creators, reducers and selectors tests
+
+Sources:
+* [Redux - Writing tests](https://redux.js.org/recipes/writingtests)
+* [Unit testing React, Redux, Selectors and Epics](https://codeburst.io/unit-testing-react-redux-selectors-and-epics-664e7b4798a8)
 
 #### UI Testing
 

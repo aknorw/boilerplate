@@ -14,6 +14,7 @@ module.exports = {
   collectCoverageFrom: [
     '**/*.{js,jsx}',
     '!index.jsx', // https://stackoverflow.com/questions/40523144/is-it-possible-to-test-your-react-app-entry-point-with-jest#comment69294003_40523144
+    '!**/index.{js,jsx}', // As index files as rollup files, do not cover them
     '!**/*.stories.{js,jsx}', // Do not cover stories
   ],
   coverageDirectory: path.resolve(__dirname, './coverage'),

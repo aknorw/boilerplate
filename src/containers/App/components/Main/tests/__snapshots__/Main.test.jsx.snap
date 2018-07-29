@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Main /> should render correctly 1`] = `
+<div>
+  <h1>
+    Hello React
+  </h1>
+  <div>
+    <span>
+      Current value: current
+    </span>
+  </div>
+  <Button
+    onClick={[MockFunction]}
+  >
+    Change value
+  </Button>
+</div>
+`;

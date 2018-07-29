@@ -3,9 +3,7 @@
 ## Features to implement
 
 * [`react-helmet`](https://github.com/nfl/react-helmet) to manage head tags easily
-* [`redux`](https://github.com/reduxjs/redux) and [`react-redux`](https://github.com/reduxjs/react-redux) to manage the state
 * [`redux-saga`](https://github.com/redux-saga/redux-saga) to handle all of the side effects logic in a central place
-* [`reselect`](https://github.com/reduxjs/reselect) to build memoized selectors
 * [`redux-persist`](https://github.com/rt2zz/redux-persist) to persist state to local storage
 * [`react-router`](https://github.com/ReactTraining/react-router) to manage routes and [`connected-react-router`](https://github.com/supasate/connected-react-router) to sync the history with `redux`
 * [`react-loadable`](https://github.com/jamiebuilds/react-loadable) to load components with dynamic imports (code splitting made simple)
