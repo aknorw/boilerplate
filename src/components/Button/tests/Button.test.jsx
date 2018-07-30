@@ -1,5 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+import 'jest-styled-components'
 
 import Button from '../Button'
 
@@ -17,6 +18,12 @@ describe('<Button />', () => {
       </Button>,
     )
     expect(tree).toMatchSnapshot()
+  })
+  it('should have style rules', () => {
+    const tree = shallow(
+      <Button />,
+    )
+    expect(tree).toHaveStyleRule('padding', '.5rem')
   })
   it('should call mock function when button is clicked', () => {
     const tree = shallow(

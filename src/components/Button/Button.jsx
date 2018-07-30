@@ -1,10 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
+
+const ButtonStyle = styled.button.attrs({
+  type: 'button',
+})`
+  padding: .5rem;
+`
 
 const Button = ({ children, ...rest }) => (
-  <button type="button" {...rest}>
+  <ButtonStyle {...rest}>
     {children}
-  </button>
+  </ButtonStyle>
 )
 
 Button.propTypes = {

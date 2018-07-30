@@ -25,6 +25,7 @@
 * [`React`](https://github.com/facebook/react)
 * [`Redux`](https://github.com/reduxjs/redux) and [`React-Redux`](https://github.com/reduxjs/react-redux) to manage the state
 * [`Reselect`](https://github.com/reduxjs/reselect) to build memoized selectors
+* [`Styled-Components`](https://github.com/styled-components/styled-components) to write CSS-in-JS
 
 ## Scripts
 
@@ -54,6 +55,7 @@ src/
   components/         # Presentational components
   containers/         # Container components
   services/           # Redux modules
+  styles/             # styled-components related files
   configureStore.js   # store configuration
   index.jsx           # app entrypoint
   index.template.html # HTML template (for webpack)
@@ -95,6 +97,7 @@ src/
             Main.test.jsx
           index.js
           Main.jsx
+          MainWrapper.js
       tests/
         App.test.jsx
       App.jsx
@@ -151,6 +154,41 @@ For testing purposes, **export both the connected** (as default) **and non-conne
 * Rarely have their own state (when they do, it’s UI state rather than data)
 
 * Should be written as functional components unless they need state, lifecycle hooks, or performance optimizations
+
+Presentational components should be styled using `styled-components`:
+
+````js
+// src/components/Button/Button.jsx
+
+import React from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+
+const ButtonStyle = styled.button.attrs({
+  type: 'button',
+})`
+  padding: .5rem;
+`
+
+const Button = ({ children, ...rest }) => (
+  <ButtonStyle {...rest}>
+    {children}
+  </ButtonStyle>
+)
+
+Button.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
+}
+
+Button.defaultProps = {
+  children: null,
+}
+
+export default Button
+````
 
 ### Redux
 
@@ -239,13 +277,14 @@ In case you encounter errors about snapshots, just run `yarn test:update` instea
 
 ##### Components
 
-Assuming we have a Presentational Component named `Button` in `src/components/Button`, here's how to write a basic test to check if it's defined, if it's rendering correctly and if the `click` event is called:
+Assuming we have a Presentational Component named `Button` in `src/components/Button`, here's how to write a basic test to check if it's defined, if it's rendering correctly, if `styled-components` did its job, and if the `click` event is called:
 
 ````js
 // src/components/Button/tests/Button.test.jsx
 
 import React from 'react'
 import { shallow } from 'enzyme'
+import 'jest-styled-components'
 
 import Button from '../Button'
 
@@ -263,6 +302,12 @@ describe('<Button />', () => {
       </Button>,
     )
     expect(tree).toMatchSnapshot()
+  })
+  it('should have style rules', () => {
+    const tree = shallow(
+      <Button />,
+    )
+    expect(tree).toHaveStyleRule('padding', '.5rem')
   })
   it('should call mock function when button is clicked', () => {
     const tree = shallow(

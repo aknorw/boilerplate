@@ -5,6 +5,9 @@
   ],
   "plugins": [
     "syntax-dynamic-import",
+    ["styled-components", {
+      "displayName": false
+    }],
     "transform-class-properties",
     "transform-object-rest-spread",
     ["module-resolver", {

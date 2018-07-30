@@ -7,9 +7,6 @@
 * [`redux-persist`](https://github.com/rt2zz/redux-persist) to persist state to local storage
 * [`react-router`](https://github.com/ReactTraining/react-router) to manage routes and [`connected-react-router`](https://github.com/supasate/connected-react-router) to sync the history with `redux`
 * [`react-loadable`](https://github.com/jamiebuilds/react-loadable) to load components with dynamic imports (code splitting made simple)
-* [`styled-components`](https://github.com/styled-components/styled-components) to write CSS-in-JS
-  * `styled-reset`
-  * Dev dependencies: `babel-plugin-styled-components` and `jest-styled-components`
 * [`react-intl`](https://github.com/yahoo/react-intl) to translate the app
   * Dev dependencies: `storybook-addon-intl`
 * [`Moment`](https://github.com/moment/moment) or [`Luxon`](https://github.com/moment/luxon) to work with dates and times

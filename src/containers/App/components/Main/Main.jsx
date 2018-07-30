@@ -3,8 +3,10 @@ import PropTypes from 'prop-types'
 
 import Button from 'components/Button'
 
+import MainWrapper from './MainWrapper'
+
 const Main = ({ currentValue, handleButtonClick }) => (
-  <div>
+  <MainWrapper>
     <h1>
       Hello React
     </h1>
@@ -16,7 +18,7 @@ const Main = ({ currentValue, handleButtonClick }) => (
     <Button onClick={handleButtonClick}>
       Change value
     </Button>
-  </div>
+  </MainWrapper>
 )
 
 Main.propTypes = {
