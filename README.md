@@ -72,6 +72,10 @@ src/
 
 Container and Presentational components are separated into separate, top-level folders in the `src` folder; with each component getting its own folder.
 
+These component folders could even potentially contain sub-component folders organized the same way if those sub-components:
+* are directly related to or composed by the main component
+* are not used elsewhere
+
 ````
 src/
   components/
@@ -97,10 +101,6 @@ src/
       index.js
     ...
 ````
-
-These component folders could even potentially contain sub-component folders organized the same way if those sub-components:
-* are directly related to or composed by the main component
-* are not used elsewhere
 
 In each case, the `index.js` file is basically a rollup file to allow easier autoloading of the component module (that's why they are not included in the coverage - see `jest.config.js`).
 
@@ -311,7 +311,143 @@ Source: [Testing React with Jest and Enzyme](https://medium.com/codeclan/testing
 
 ##### Redux
 
-@TODO: Write about action creators, reducers and selectors tests
+**Reducers**
+
+A reducer should return the new state after applying the action to the previous state.
+
+````js
+import * as types from './types'
+
+export const initialState = [
+  {
+    text: 'Use Redux',
+    completed: false,
+    id: 0,
+  },
+]
+
+const reducer = (state = initialState, action) => {
+  switch (action.type) {
+    case types.TODO_ADD:
+      return [
+        {
+          id: state.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
+          completed: false,
+          text: action.text,
+        },
+        ...state
+      ]
+    default:
+      return state
+  }
+}
+
+export default reducer
+````
+
+This reducer can be tested like:
+
+````js
+import reducer, { initialState } from '../reducer'
+import * as types from '../types'
+
+describe('reducer', () => {
+  it('should return the initial state', () => {
+    expect(reducer(undefined, {})).toEqual(initialState)
+  })
+  it('should handle TODO_ADD', () => {
+    const testTodo = {
+      type: types.TODO_ADD,
+      text: 'Run the tests',
+    }
+    expect(reducer([], testTodo)).toEqual([testTodo])
+    expect(reducer(initialState, testTodo)).toEqual([testTodo, initialState])
+  })
+})
+````
+
+**Action creators**
+
+When testing action creators, we want to test whether the correct action creator was called and also whether the right action was returned.
+
+````js
+import * as types from './types'
+
+export const addTodo = (text) => {
+  return {
+    type: types.TODO_ADD,
+    text,
+  }
+}
+````
+
+This action creator could be tested like:
+
+````js
+import * as actions from '../actions'
+import * as types from '../types'
+
+describe('actions', () => {
+  it('should create an action to add a todo', () => {
+    const text = 'Finish docs'
+    const expectedAction = {
+      type: types.TODO_ADD,
+      text,
+    }
+    expect(actions.addTodo(text)).toEqual(expectedAction)
+  })
+})
+````
+
+**Selectors**
+
+````js
+import { createSelector } from 'reselect'
+
+export const selectTodoState = ({ todos }) => todos
+
+export const selectCompletedTodos = () => createSelector(selectTodoState, state => state.filter(todo => todo.completed))
+````
+
+This selector could be tested like:
+
+````js
+import { selectTodoState, selectCompletedTodos } from '../selectors'
+
+describe('selectors', () => {
+  let mockState
+  beforeAll(() => {
+    mockState = {
+      todos: [
+        {
+          text: 'Finish docs',
+          completed: false,
+          id: 1,
+        },
+        {
+          text: 'Use Redux',
+          completed: true,
+          id: 0,
+        },
+      ]
+    }
+  })
+  it('selectTodoState() should return todo state', () => {
+    const todoState = selectTodoState(mockState)
+    expect(todoState).toEqual(mockState.todos)
+  })
+  it('selectCompletedTodos() should return completed todos', () => {
+    const completedTodos = selectCompletedTodos().resultFunc(mockState.todos)
+    expect(completedTodos).toEqual([
+      {
+        text: 'Use Redux',
+        completed: true,
+        id: 0,
+      }
+    ])
+  })
+})
+````
 
 Sources:
 * [Redux - Writing tests](https://redux.js.org/recipes/writingtests)
