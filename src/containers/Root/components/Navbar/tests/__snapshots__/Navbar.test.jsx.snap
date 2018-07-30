@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Navbar /> should render correctly 1`] = `
+<styled.nav>
+  <Styled(Link)
+    to="/"
+  >
+    Test
+  </Styled(Link)>
+  <styled.div>
+    <Styled(Link)
+      to="/settings"
+    >
+      Settings
+    </Styled(Link)>
+  </styled.div>
+</styled.nav>
+`;

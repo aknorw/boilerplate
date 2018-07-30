@@ -8,6 +8,8 @@
   * [Folders organization](#folders-organization)
   * [Components](#components)
   * [Redux](#redux)
+  * [Routing](#routing)
+  * [Utilities](#utilities)
   * [Naming things](#naming-things)
 * [Development](#development)
   * Logging :construction:
@@ -26,6 +28,7 @@
 * [`Redux`](https://github.com/reduxjs/redux) and [`React-Redux`](https://github.com/reduxjs/react-redux) to manage the state
 * [`Reselect`](https://github.com/reduxjs/reselect) to build memoized selectors
 * [`Styled-Components`](https://github.com/styled-components/styled-components) to write CSS-in-JS
+* [`React-Router`](https://github.com/ReactTraining/react-router) to manage routes
 * [`React-Helmet`](https://github.com/nfl/react-helmet) to manage head tags easily
 
 ## Scripts
@@ -55,8 +58,10 @@ Useful resources:
 src/
   components/         # Presentational components
   containers/         # Container components
+  pages/              # Container components used as router entrypoints
   services/           # Redux modules
   styles/             # styled-components related files
+  utils/              # Utilities
   configureStore.js   # store configuration
   index.jsx           # app entrypoint
   index.template.html # HTML template (for webpack)
@@ -73,7 +78,7 @@ src/
 **Reading Data** | subscribe to Redux State | From props
 **Changing Data** | dispatch Redux actions | invoke callbacks from props
 
-Container and Presentational components are separated into separate, top-level folders in the `src` folder; with each component getting its own folder.
+Container and Presentational components are separated into separate, top-level folders in the `src` folder; with each component getting its own folder. Container components could also be located in `src/pages/` folder if they are router entrypoints (see [Routing](#routing) for more information).
 
 These component folders could even potentially contain sub-component folders organized the same way if those sub-components:
 * are directly related to or composed by the main component
@@ -91,19 +96,21 @@ src/
     ...
 
   containers/
-    App/
+    Root/
       components/
-        Main/
+        Layout/
           tests/
-            Main.test.jsx
-            MainWrapper.test.jsx
+            RootWrapper.test.jsx
+            SwitchWrapper.test.jsx
           index.js
-          Main.jsx
-          MainWrapper.js
+          RootWrapper.jsx
+          SwitchWrapper.js
+        Navbar/
+          ...
       tests/
-        App.test.jsx
-      App.jsx
+        Root.test.jsx
       index.js
+      Root.jsx
     ...
 ````
 
@@ -235,6 +242,18 @@ export const FOO_UPDATE = '@@basic/FOO_UPDATE'
 
 Selectors should be written in camel case and begin with *select* (eg. `selectCurrentUser`).
 
+### Routing
+
+@TODO: DOCS ABOUT ROUTING
+
+### Utilities
+
+Utilities - or helper functions - should be located in the `src/utils/` folder and follow a few rules:
+
+* One function per file, exported as default
+* A named export per function in `src/utils/index.js`
+* Utility should be imported from `utils` as a named import instead of its own file
+
 ### Naming things
 
 #### General
@@ -274,8 +293,6 @@ This boilerplate uses [`Jest`](https://github.com/facebook/jest) as a test runne
 As unit tests are not just about components, **almost every folder in the `src` directory should have a `tests` folder** containing test files that should be named after the file they refer to and end with `.test.js` or `.test.jsx`.
 
 To run the tests, just type `yarn test` in the terminal. When all tests are run, you will see a coverage report that may help you implement other tests.
-
-In case you encounter errors about snapshots, just run `yarn test:update` instead of `yarn test` to update the snapshots.
 
 ##### Components
 
@@ -326,12 +343,12 @@ describe('<Button />', () => {
 For Container Components, you should import the named export to test the component itself and not the Redux-decorated one (as Redux is already tested).
 
 ````js
-// src/containers/App/tests/App.test.jsx
+// src/containers/Root/tests/Root.test.jsx
 
 import React from 'react'
 import { shallow } from 'enzyme'
 
-import { App } from '../App' // We import the component itself, not the connected one
+import { Root } from '../Root' // We import the component itself, not the connected one
 
 ...
 ````

@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<NavbarBrand /> should render correctly 1`] = `
+.c0 {
+  color: white;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-font-smoothing: antialiased;
+  font-size: 1.25em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+<Link
+  className="c0"
+  replace={false}
+/>
+`;

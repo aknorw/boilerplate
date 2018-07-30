@@ -1,8 +1,9 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
+import { BrowserRouter as Router } from 'react-router-dom'
 
-import App from 'containers/App'
+import Root from 'containers/Root'
 import configureStore from 'configureStore'
 
 // Import global styles (ie. written in `injectGlobal`)
@@ -16,8 +17,10 @@ const MOUNT_NODE = document.getElementById('root')
 // Prefer to wrap the app to use hydrate for SSR
 const wrapApp = (Component, reduxStore) => (
   <Provider store={reduxStore}>
-    <Component />
+    <Router>
+      <Component />
+    </Router>
   </Provider>
 )
 
-render(wrapApp(App, store), MOUNT_NODE)
+render(wrapApp(Root, store), MOUNT_NODE)

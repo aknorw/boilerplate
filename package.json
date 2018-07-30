@@ -8,8 +8,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "lint": "eslint --ext .jsx,.js src",
-    "test": "jest --config jest.config.js",
-    "test:update": "jest --config jest.config.js --updateSnapshot",
+    "test": "jest --config jest.config.js --updateSnapshot",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config ./webpack/index.babel.js --mode development",
     "prebuild": "yarn clean",
@@ -25,6 +24,7 @@
     "react-helmet": "^5.2.0",
     "react-hot-loader": "^4.3.4",
     "react-redux": "^5.0.7",
+    "react-router-dom": "^4.3.1",
     "redux": "^4.0.0",
     "reselect": "^3.0.1",
     "styled-components": "^3.3.3",

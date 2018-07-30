@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Settings /> should render correctly 1`] = `
+<div>
+  <HelmetWrapper
+    defer={true}
+    encodeSpecialCharacters={true}
+    title="Settings"
+  />
+  <h1>
+    Settings
+  </h1>
+  <Button
+    onClick={[MockFunction]}
+  >
+    Change foo from Settings
+  </Button>
+</div>
+`;
