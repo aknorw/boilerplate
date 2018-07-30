@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 
@@ -9,10 +10,19 @@ import { selectFoo } from 'services/basic/selectors'
 import Main from './components/Main'
 
 export const App = ({ foo, handleButtonClick }) => (
-  <Main
-    currentValue={foo}
-    handleButtonClick={handleButtonClick}
-  />
+  <div>
+    <Helmet
+      titleTemplate={`%s - ${APP_NAME}`}
+      defaultTitle={APP_NAME}
+    >
+      {/* The following line will be used when implementing i18n */}
+      <html lang="en" />
+    </Helmet>
+    <Main
+      currentValue={foo}
+      handleButtonClick={handleButtonClick}
+    />
+  </div>
 )
 
 App.propTypes = {

@@ -7,6 +7,9 @@ module.exports = {
   roots: [
     '<rootDir>',
   ],
+  globals: {
+    APP_NAME: 'JEST',
+  },
   snapshotSerializers: [
     'enzyme-to-json/serializer',
   ],

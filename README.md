@@ -26,6 +26,7 @@
 * [`Redux`](https://github.com/reduxjs/redux) and [`React-Redux`](https://github.com/reduxjs/react-redux) to manage the state
 * [`Reselect`](https://github.com/reduxjs/reselect) to build memoized selectors
 * [`Styled-Components`](https://github.com/styled-components/styled-components) to write CSS-in-JS
+* [`React-Helmet`](https://github.com/nfl/react-helmet) to manage head tags easily
 
 ## Scripts
 
@@ -95,6 +96,7 @@ src/
         Main/
           tests/
             Main.test.jsx
+            MainWrapper.test.jsx
           index.js
           Main.jsx
           MainWrapper.js
