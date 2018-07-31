@@ -1,21 +1,25 @@
+/* eslint-disable no-console */
+
 import React from 'react'
 import { shallow } from 'enzyme'
 import 'jest-styled-components'
 
-import NavLink from '../NavLink'
+import TopBarBrand from '../TopBarBrand'
 
 console.error = jest.fn()
 
-describe('<NavLink />', () => {
+describe('<TopBarBrand />', () => {
   it('should be defined', () => {
-    expect(NavLink).toBeDefined()
+    expect(TopBarBrand).toBeDefined()
   })
   it('should log 1 error when `to` is missing', () => {
-    shallow(<NavLink />)
+    shallow(<TopBarBrand />)
     expect(console.error).toHaveBeenCalledTimes(1)
   })
   it('should render correctly', () => {
-    const tree = shallow(<NavLink to="/test" />)
+    const tree = shallow(
+      <TopBarBrand to="/test" />,
+    )
     expect(tree).toMatchSnapshot()
   })
 })

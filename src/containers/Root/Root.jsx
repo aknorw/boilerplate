@@ -11,7 +11,10 @@ import { selectFoo } from 'services/basic/selectors'
 import routes from 'pages'
 
 import { RootWrapper, SwitchWrapper } from './components/Layout'
-import Navbar from './components/Navbar'
+import TopBar from './components/TopBar'
+
+// This is temporary
+const today = new Intl.DateTimeFormat().format(new Date())
 
 export const Root = ({ foo }) => (
   <RootWrapper>
@@ -22,7 +25,12 @@ export const Root = ({ foo }) => (
       {/* The following line will be used when implementing i18n */}
       <html lang="en" />
     </Helmet>
-    <Navbar title={foo} />
+    <TopBar
+      title={foo}
+      date={today}
+    >
+      ...
+    </TopBar>
     <SwitchWrapper>
       {routes}
     </SwitchWrapper>

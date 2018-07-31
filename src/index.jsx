@@ -2,6 +2,8 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'connected-react-router'
+// We use createBrowserHistory assuming we will have a server that handle dynamic requests
+// In case we won't, we should use createHashHistory
 import createHistory from 'history/createBrowserHistory'
 
 import Root from 'containers/Root'

@@ -2,24 +2,26 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import 'jest-styled-components'
 
-import NavbarSection from '../NavbarSection'
+import variables from 'styles/variables'
 
-describe('<NavbarSection />', () => {
+import TopBarSection from '../TopBarSection'
+
+describe('<TopBarSection />', () => {
   it('should be defined', () => {
-    expect(NavbarSection).toBeDefined()
+    expect(TopBarSection).toBeDefined()
   })
   it('should render correctly', () => {
     const tree = shallow(
-      <NavbarSection />,
+      <TopBarSection />,
     )
     expect(tree).toMatchSnapshot()
   })
   it('should have style rules', () => {
     const tree = shallow(
-      <NavbarSection />,
+      <TopBarSection />,
     )
     expect(tree).toHaveStyleRule('display', 'inline-flex')
     expect(tree).toHaveStyleRule('align-items', 'baseline')
-    expect(tree).toHaveStyleRule('font-size', '1em')
+    expect(tree).toHaveStyleRule('font-size', `${variables.font.defaultFontSize}em`)
   })
 })

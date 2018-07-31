@@ -3,25 +3,20 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 
-import { Root } from '../Root'
+import TopBar from '../TopBar'
 
 console.error = jest.fn()
 
-describe('<Root />', () => {
+describe('<TopBar />', () => {
   it('should be defined', () => {
-    expect(Root).toBeDefined()
+    expect(TopBar).toBeDefined()
   })
-  it('should log 2 errors when no props are passed', () => { // 1 for Root, 1 for TopBar
-    shallow(<Root />)
+  it('should log 2 errors when no props are passed', () => {
+    shallow(<TopBar />)
     expect(console.error).toHaveBeenCalledTimes(2)
   })
   it('should render correctly', () => {
-    const foo = 'bar'
-    const tree = shallow(
-      <Root
-        foo={foo}
-      />,
-    )
+    const tree = shallow(<TopBar title="Test" />)
     expect(tree).toMatchSnapshot()
   })
 })
