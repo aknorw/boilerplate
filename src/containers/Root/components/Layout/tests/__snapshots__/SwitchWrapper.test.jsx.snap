@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`<SwitchWrapper /> should render correctly 1`] = `
-<styled.main>
-  <Switch />
-</styled.main>
-`;

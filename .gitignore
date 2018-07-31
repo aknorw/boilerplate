@@ -26,4 +26,7 @@ node_modules/
 # webpack build ouput
 dist
 
+# jest snapshots
+__snapshots__
+
 .DS_Store
