@@ -1,6 +1,6 @@
 {
   "name": "boilerplate",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "index.js",
   "repository": "https://github.com/aknorw/boilerplate.git",
   "author": "@aknorw",
@@ -13,7 +13,8 @@
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config ./webpack/index.babel.js --mode development",
     "prebuild": "yarn clean",
     "build": "cross-env NODE_ENV=production webpack --config ./webpack/index.babel.js --env.production --mode production --progress --colors",
-    "precommit": "yarn lint && yarn test"
+    "precommit": "yarn lint && yarn test",
+    "postversion": "git push origin --tags"
   },
   "dependencies": {
     "cross-env": "^5.2.0",
