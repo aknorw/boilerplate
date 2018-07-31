@@ -8,11 +8,15 @@
     ["styled-components", {
       "displayName": false
     }],
+    "polished",
     "transform-class-properties",
     "transform-object-rest-spread",
     ["module-resolver", {
       "extensions": [".js", ".jsx"],
-      "root": ["./src"]
+      "root": ["./src"],
+      "alias": {
+        "assets": "./assets"
+      }
     }]
   ],
   "env": {

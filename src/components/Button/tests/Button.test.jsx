@@ -2,6 +2,8 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import 'jest-styled-components'
 
+import variables from 'styles/variables'
+
 import Button from '../Button'
 
 const mockFn = jest.fn()
@@ -23,7 +25,7 @@ describe('<Button />', () => {
     const tree = shallow(
       <Button />,
     )
-    expect(tree).toHaveStyleRule('padding', '.5rem')
+    expect(tree).toHaveStyleRule('padding', `${variables.spacer / 2}rem`)
   })
   it('should call mock function when button is clicked', () => {
     const tree = shallow(
