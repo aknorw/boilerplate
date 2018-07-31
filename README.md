@@ -29,7 +29,7 @@
 * [`Redux`](https://github.com/reduxjs/redux) and [`React-Redux`](https://github.com/reduxjs/react-redux) to manage the state
 * [`Reselect`](https://github.com/reduxjs/reselect) to build memoized selectors
 * [`Styled-Components`](https://github.com/styled-components/styled-components) to write CSS-in-JS
-* [`React-Router`](https://github.com/ReactTraining/react-router) to manage routes
+* [`React-Router`](https://github.com/ReactTraining/react-router) to manage routes and [`Connected-React-Router`](https://github.com/supasate/connected-react-router) to sync history with `redux`
 * [`React-Helmet`](https://github.com/nfl/react-helmet) to manage head tags easily
 
 ## Scripts

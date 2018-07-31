@@ -17,8 +17,10 @@
     "postversion": "git push origin --tags"
   },
   "dependencies": {
+    "connected-react-router": "^4.3.0",
     "cross-env": "^5.2.0",
     "dotenv": "^6.0.0",
+    "history": "^4.7.2",
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",

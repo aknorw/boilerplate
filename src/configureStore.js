@@ -4,12 +4,18 @@ import {
   compose,
   createStore,
 } from 'redux'
+import { connectRouter, routerMiddleware } from 'connected-react-router'
 
 import reducers from 'services/reducers'
 
-export default function configureStore(initialState = {}) {
+export default function configureStore(initialState = {}, history) {
   const rootReducer = combineReducers(reducers)
-  const middlewares = []
+  const composeReducer = compose(
+    connectRouter(history),
+  )
+  const middlewares = [
+    routerMiddleware(history),
+  ]
   const enhancers = [applyMiddleware(...middlewares)]
   // In development, use Redux Devtools if available
   /* eslint-disable no-underscore-dangle */
@@ -20,7 +26,7 @@ export default function configureStore(initialState = {}) {
   ) ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose
   /* eslint-enable */
   const store = createStore(
-    rootReducer,
+    composeReducer(rootReducer),
     initialState,
     composeEnhancers(...enhancers),
   )

@@ -1,9 +1,8 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
-// We use BrowserRouter assuming we will have a server that handle dynamic requests
-// In case we won't, we should use HashRouter
-import { BrowserRouter as Router } from 'react-router-dom'
+import { ConnectedRouter } from 'connected-react-router'
+import createHistory from 'history/createBrowserHistory'
 
 import Root from 'containers/Root'
 import configureStore from 'configureStore'
@@ -12,16 +11,17 @@ import configureStore from 'configureStore'
 import 'styles'
 
 const initialState = {}
-const store = configureStore(initialState)
+const history = createHistory()
+const store = configureStore(initialState, history)
 
 const MOUNT_NODE = document.getElementById('root')
 
 // Prefer to wrap the app to use hydrate for SSR
 const wrapApp = (Component, reduxStore) => (
   <Provider store={reduxStore}>
-    <Router>
+    <ConnectedRouter history={history}>
       <Component />
-    </Router>
+    </ConnectedRouter>
   </Provider>
 )
 
