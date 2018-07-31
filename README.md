@@ -13,6 +13,7 @@
   * [Naming things](#naming-things)
 * [Development](#development)
   * Logging :construction:
+  * [Type checking](#type-checking)
   * [Linting](#linting)
   * [Testing](#testing)
   * [Transpiling](#transpiling)
@@ -244,7 +245,70 @@ Selectors should be written in camel case and begin with *select* (eg. `selectCu
 
 ### Routing
 
-@TODO: DOCS ABOUT ROUTING
+> Routing is the process of keeping the browser URL in sync with what's being rendered on the page.
+
+Routing is done with [`React-Router` v4](https://github.com/ReactTraining/react-router) which allows using React components.
+
+Every route, or *page*, should be defined as a new folder in the `src/pages/` folder. As explained in the [Components](#components) section, pages are just Container components used as router entrypoints.
+
+````
+src/
+  pages/
+    Dashboard/    # dashboard page
+    Settings/     # settings page
+    index.js
+````
+
+At the root of this folder, the `index.js` file is basically a configuration file: every route (and subroutes) should be defined in an array of objects that follow `<Route />` props (at least).
+
+To actually create the routes (that will be injected in the `<Root />` container), we map through the array using an utility function (`makeCustomRoute`) that returns `<Route />` components based on the object.
+
+````js
+// src/pages/index.js
+
+import { makeCustomRoute } from 'utils'
+
+import Dashboard from './Dashboard'
+import Settings from './Settings'
+
+const routesConfig = [
+  {
+    name: 'Settings',
+    path: '/settings',
+    component: Settings,
+  },
+  {
+    name: 'Dashboard',
+    path: '/',
+    exact: true,
+    component: Dashboard,
+  },
+]
+
+export default routesConfig.map(route => makeCustomRoute(route))
+````
+
+Note: `makeCustomRoute` is recursive. In case you want to create subroutes (eg. `/settings/users`), you should put them in the `routes` property of the parent route:
+
+````js
+// Example of subroutes configuration
+
+const routesConfig = [
+  {
+    name: 'Settings',
+    path: '/settings',
+    component: Settings,
+    routes: [
+      {
+        name: 'Users',
+        path: '/users',
+        component: UserSettings,
+      }
+    ]
+  },
+  ...
+]
+````
 
 ### Utilities
 
@@ -277,6 +341,12 @@ Event handlers should:
 * be present-tense
 
 ## Development
+
+### Type checking
+
+Type checking is done with [`PropTypes`](https://github.com/facebook/prop-types).
+
+As explained in the [Components](#components) section, you should declare `propTypes` and `defaultProps` for every component that have props.
 
 ### Linting
 

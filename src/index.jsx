@@ -1,6 +1,8 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
+// We use BrowserRouter assuming we will have a server that handle dynamic requests
+// In case we won't, we should use HashRouter
 import { BrowserRouter as Router } from 'react-router-dom'
 
 import Root from 'containers/Root'
