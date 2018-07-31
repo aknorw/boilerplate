@@ -1,7 +1,6 @@
 import { makeCustomRoute } from 'utils'
 
-// Every time we add a new page, we have to import the container components
-// When react-loadable will be implemented, we will have to import the Loadable component
+// Every time we add a new page, we have to import the Loadable component
 import Homepage from './Homepage'
 import Settings from './Settings'
 

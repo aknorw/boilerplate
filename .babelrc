@@ -20,6 +20,11 @@
       "plugins": [
         "react-hot-loader/babel"
       ]
+    },
+    "test": {
+      "plugins": [
+        "dynamic-import-node"
+      ]
     }
   }
 }

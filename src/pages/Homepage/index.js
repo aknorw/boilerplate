@@ -1,3 +1,5 @@
-import ConnectedHomepage from './Homepage'
+import { createAsyncComponent } from 'utils'
 
-export default ConnectedHomepage
+export default createAsyncComponent({
+  loader: () => import('./Homepage' /* webpackChunkName: 'homepage' */),
+})

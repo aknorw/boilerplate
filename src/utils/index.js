@@ -5,4 +5,5 @@
 // instead of:
 // import reallyUsefulFn from 'utils/reallyUsefulFn'
 
+export { default as createAsyncComponent } from './createAsyncComponent'
 export { default as makeCustomRoute } from './makeCustomRoute'

@@ -1,3 +1,5 @@
-import ConnectedSettings from './Settings'
+import { createAsyncComponent } from 'utils'
 
-export default ConnectedSettings
+export default createAsyncComponent({
+  loader: () => import('./Settings' /* webpackChunkName: 'settings' */),
+})

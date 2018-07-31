@@ -30,6 +30,7 @@
 * [`Reselect`](https://github.com/reduxjs/reselect) to build memoized selectors
 * [`Styled-Components`](https://github.com/styled-components/styled-components) to write CSS-in-JS
 * [`React-Router`](https://github.com/ReactTraining/react-router) to manage routes and [`Connected-React-Router`](https://github.com/supasate/connected-react-router) to sync history with `redux`
+* [`React-Loadable`](https://github.com/jamiebuilds/react-loadable) to load components with dynamic imports (code-splitting made simple)
 * [`React-Helmet`](https://github.com/nfl/react-helmet) to manage head tags easily
 
 ## Scripts
@@ -259,6 +260,8 @@ src/
     index.js
 ````
 
+#### Routes configuration
+
 At the root of this folder, the `index.js` file is basically a configuration file: every route (and subroutes) should be defined in an array of objects that follow `<Route />` props (at least).
 
 To actually create the routes (that will be injected in the `<Root />` container), we map through the array using an utility function (`makeCustomRoute`) that returns `<Route />` components based on the object.
@@ -309,6 +312,39 @@ const routesConfig = [
   ...
 ]
 ````
+
+#### Code-splitting
+
+To code-split the app automatically, this boilerplate uses [`react-loadable`](https://github.com/jamiebuilds/react-loadable).
+
+Everytime you want to add a new route (or a subroute), you should default export the Loadable component and import it in the route configuration. To make this step smoothier, just use the `createAsyncComponent` utility function.
+
+````js
+// src/utils/createAsyncComponent.js
+
+import loadable from 'react-loadable'
+
+import LoadingComponent from 'components/Loading'
+
+export default ({ loader, loading = LoadingComponent }) => loadable({
+  loader, // Loader should be something like () => import('./Page')
+  loading,
+  delay: 300, // 0.3s
+  timeout: 10000, // 10s
+})
+````
+
+````js
+// src/pages/Settings/index.js
+
+import { createAsyncComponent } from 'utils'
+
+export default createAsyncComponent({
+  loader: () => import('./Settings' /* webpackChunkName: 'settings' */),
+})
+````
+
+To make chunk names prettier (and readable), you should use the *webpack magic comment* in the import function: `/* webpackChunkName: 'settings' */`.
 
 ### Utilities
 
@@ -627,6 +663,8 @@ storiesOf('Button', module)
 ### Transpiling
 
 This boilerplate uses [Babel](https://babeljs.io/) to transpile ES6/ES7 code to ES5, with the following plugins:
+
+* `dynamic-import-node` to allow Node to recognize the `import` function (otherwise, `Jest` throws an error while running tests) [*test only*]
 
 * `module-resolver` to add new "root" directories that contain modules (ie. write `components/Button` instead of `../../../components/Button`)
 
