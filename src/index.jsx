@@ -5,6 +5,7 @@ import { ConnectedRouter } from 'connected-react-router'
 // We use createBrowserHistory assuming we will have a server that handle dynamic requests
 // In case we won't, we should use createHashHistory
 import createHistory from 'history/createBrowserHistory'
+import { PersistGate } from 'redux-persist/integration/react'
 
 import Root from 'containers/Root'
 import configureStore from 'configureStore'
@@ -18,7 +19,7 @@ import { translationMessages } from './i18n'
 
 const initialState = {}
 const history = createHistory()
-const store = configureStore(initialState, history)
+const { store, persistor } = configureStore(initialState, history)
 
 const MOUNT_NODE = document.getElementById('root')
 
@@ -27,7 +28,9 @@ const wrapApp = (Component, reduxStore, messages) => (
   <Provider store={reduxStore}>
     <LanguageProvider messages={messages}>
       <ConnectedRouter history={history}>
-        <Component />
+        <PersistGate persistor={persistor}>
+          <Component />
+        </PersistGate>
       </ConnectedRouter>
     </LanguageProvider>
   </Provider>

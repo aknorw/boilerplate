@@ -5,8 +5,16 @@ import {
   createStore,
 } from 'redux'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 
 import reducers from 'services/reducers'
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  blacklist: ['router'], // router will not be persisted
+}
 
 export default function configureStore(initialState = {}, history) {
   const rootReducer = combineReducers(reducers)
@@ -26,9 +34,13 @@ export default function configureStore(initialState = {}, history) {
   ) ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose
   /* eslint-enable */
   const store = createStore(
-    composeReducer(rootReducer),
+    persistReducer(persistConfig, composeReducer(rootReducer)),
     initialState,
     composeEnhancers(...enhancers),
   )
-  return store
+  const persistor = persistStore(store)
+  return {
+    store,
+    persistor,
+  }
 }

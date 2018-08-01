@@ -36,13 +36,14 @@ describe('<LanguageProvider />', () => {
 })
 
 describe('<ConnectedLanguageProvider />', () => {
-  let store
+  let testStore
   beforeAll(() => {
-    store = configureStore({}, history)
+    const { store } = configureStore({}, history)
+    testStore = store
   })
   it('should render the default language message', () => {
     const tree = shallow(
-      <Provider store={store}>
+      <Provider store={testStore}>
         <ConnectedLanguageProvider messages={translationMessages}>
           <FormattedMessage {...messages.someMessage} />
         </ConnectedLanguageProvider>

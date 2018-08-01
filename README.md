@@ -31,6 +31,7 @@
 * [`Reselect`](https://github.com/reduxjs/reselect) to build memoized selectors
 * [`Styled-Components`](https://github.com/styled-components/styled-components) to write CSS-in-JS
 * [`React-Router`](https://github.com/ReactTraining/react-router) to manage routes and [`Connected-React-Router`](https://github.com/supasate/connected-react-router) to sync history with `redux`
+* [`Redux-Persist`](https://github.com/rt2zz/redux-persist) to persist state to local storage
 * [`React-Loadable`](https://github.com/jamiebuilds/react-loadable) to load components with dynamic imports (code-splitting made simple)
 * [`React-Helmet`](https://github.com/nfl/react-helmet) to manage head tags easily
 * [`React-Intl`](https://github.com/yahoo/react-intl) to translate the app
