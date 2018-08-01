@@ -9,6 +9,7 @@
   * [Components](#components)
   * [Redux](#redux)
   * [Routing](#routing)
+  * [i18n](#i18n)
   * [Utilities](#utilities)
   * [Naming things](#naming-things)
 * [Development](#development)
@@ -32,6 +33,7 @@
 * [`React-Router`](https://github.com/ReactTraining/react-router) to manage routes and [`Connected-React-Router`](https://github.com/supasate/connected-react-router) to sync history with `redux`
 * [`React-Loadable`](https://github.com/jamiebuilds/react-loadable) to load components with dynamic imports (code-splitting made simple)
 * [`React-Helmet`](https://github.com/nfl/react-helmet) to manage head tags easily
+* [`React-Intl`](https://github.com/yahoo/react-intl) to translate the app
 
 ## Scripts
 
@@ -60,6 +62,7 @@ Useful resources:
 src/
   components/         # Presentational components
   containers/         # Container components
+  i18n/               # Internationalization files
   pages/              # Container components used as router entrypoints
   services/           # Redux modules
   styles/             # styled-components related files
@@ -121,9 +124,7 @@ In each case, the `index.js` file is basically a rollup file to allow easier aut
 ````js
 // src/components/Button/index.js
 
-import Button from './Button'
-
-export default Button
+export { default } from './Button'
 ````
 
 For every component, you should follow some basic rules:
@@ -345,6 +346,58 @@ export default createAsyncComponent({
 ````
 
 To make chunk names prettier (and readable), you should use the *webpack magic comment* in the import function: `/* webpackChunkName: 'settings' */`.
+
+### i18n
+
+Internationalization is handled by [`react-intl`](https://github.com/yahoo/react-intl).
+
+Instead of using `<IntlProvider />` from the package, we use a custom provider named `<LanguageProvider />` which is basically the same component but **connected** to the store. This way, you are able to dispatch an action to change the locale of the whole app.
+
+For every component that contain strings to be translated, you should create a file named `messages.js` at the root of the folder.
+
+````js
+// src/pages/Dashboard/messages.js
+
+import { defineMessages } from 'react-intl'
+
+export default defineMessages({
+  title: {
+    id: 'pages.Dashboard.title',
+    defaultMessage: 'Dashboard',
+  },
+  subtitle: {
+    id: 'pages.Dashboard.subtitle',
+    defaultMessage: 'Some interesting things to be written here',
+  },
+})
+````
+
+This file must be imported in the component one and used with `<FormattedMessage />`.
+
+````js
+// src/pages/Dashboard/Dashboard.jsx
+
+...
+
+import messages from './messages'
+
+...
+  <h1>
+    <FormattedMessage {...messages.title} />
+  </h1>
+...
+````
+
+Translations files must be located in the `src/i18n/translations/` folder, named after their language.
+
+````js
+// src/i18n/translations/fr.json
+
+{
+  "pages.Dashboard.title": "Tableau de bord",
+  "pages.HomePage.subtitle": "Quelques informations importantes seront écrites ici"
+}
+````
 
 ### Utilities
 

@@ -3,7 +3,9 @@
 import { hot } from 'react-hot-loader'
 
 import basic from './basic/reducer'
+import language from './language/reducer'
 
 export default hot(module)({
   basic,
+  language,
 })

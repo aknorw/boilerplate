@@ -6,4 +6,5 @@
 // import reallyUsefulFn from 'utils/reallyUsefulFn'
 
 export { default as createAsyncComponent } from './createAsyncComponent'
+export { default as getBrowserLanguage } from './getBrowserLanguage'
 export { default as makeCustomRoute } from './makeCustomRoute'

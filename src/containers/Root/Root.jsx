@@ -6,30 +6,35 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 
-import { selectFoo } from 'services/basic/selectors'
+import { changeLocale } from 'services/language/actions'
+import { selectCurrentLocale, selectAvailableLocales } from 'services/language/selectors'
 
 import routes from 'pages'
 
 import { RootWrapper, SwitchWrapper } from './components/Layout'
 import TopBar from './components/TopBar'
+import LanguageSwitcher from './components/LanguageSwitcher'
 
 // This is temporary
 const today = new Intl.DateTimeFormat().format(new Date())
 
-export const Root = ({ foo }) => (
+export const Root = ({ currentLocale, availableLocales, handleLanguageSwitch }) => (
   <RootWrapper>
     <Helmet
       titleTemplate={`%s - ${APP_NAME}`}
       defaultTitle={APP_NAME}
     >
-      {/* The following line will be used when implementing i18n */}
-      <html lang="en" />
+      <html lang={currentLocale} />
     </Helmet>
     <TopBar
-      title={foo}
+      title={APP_NAME}
       date={today}
     >
-      ...
+      <LanguageSwitcher
+        currentLocale={currentLocale}
+        availableLocales={availableLocales}
+        onSwitch={handleLanguageSwitch}
+      />
     </TopBar>
     <SwitchWrapper>
       {routes}
@@ -38,14 +43,25 @@ export const Root = ({ foo }) => (
 )
 
 Root.propTypes = {
-  foo: PropTypes.string.isRequired,
+  currentLocale: PropTypes.string,
+  availableLocales: PropTypes.arrayOf(PropTypes.string).isRequired,
+  handleLanguageSwitch: PropTypes.func.isRequired,
+}
+
+Root.defaultProps = {
+  currentLocale: null,
 }
 
 const mapStateToProps = createStructuredSelector({
-  foo: selectFoo(),
+  currentLocale: selectCurrentLocale(),
+  availableLocales: selectAvailableLocales(),
 })
 
-const withConnect = connect(mapStateToProps, null)
+const mapDispatchToProps = dispatch => ({
+  handleLanguageSwitch: locale => dispatch(changeLocale(locale)),
+})
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps)
 
 export default compose(
   withRouter,

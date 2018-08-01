@@ -1,25 +1,22 @@
-/* eslint-disable no-console */
-
 import React from 'react'
 import { shallow } from 'enzyme'
 
 import { Root } from '../Root'
 
-console.error = jest.fn()
+const testLocales = ['es', 'ru']
+
+const mockFn = jest.fn()
 
 describe('<Root />', () => {
   it('should be defined', () => {
     expect(Root).toBeDefined()
   })
-  it('should log 2 errors when no props are passed', () => { // 1 for Root, 1 for TopBar
-    shallow(<Root />)
-    expect(console.error).toHaveBeenCalledTimes(2)
-  })
   it('should render correctly', () => {
-    const foo = 'bar'
     const tree = shallow(
       <Root
-        foo={foo}
+        currentLocale={testLocales[0]}
+        availableLocales={testLocales}
+        handleLanguageSwitch={mockFn}
       />,
     )
     expect(tree).toMatchSnapshot()
