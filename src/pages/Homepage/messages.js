@@ -9,4 +9,12 @@ export default defineMessages({
     id: 'pages.HomePage.subtitle',
     defaultMessage: 'Some interesting things to be written here',
   },
+  city: {
+    id: 'pages.HomePage.city',
+    defaultMessage: 'City',
+  },
+  temperature: {
+    id: 'pages.HomePage.temperature',
+    defaultMessage: 'Temperature',
+  },
 })

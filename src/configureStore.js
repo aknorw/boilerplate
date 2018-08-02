@@ -5,15 +5,20 @@ import {
   createStore,
 } from 'redux'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
+import createSagaMiddleware from 'redux-saga'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 
 import reducers from 'services/reducers'
+import sagas from 'services/sagas'
 
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['router'], // router will not be persisted
+  blacklist: [
+    'router', // router will not be persisted
+    'weather',
+  ],
 }
 
 export default function configureStore(initialState = {}, history) {
@@ -21,7 +26,9 @@ export default function configureStore(initialState = {}, history) {
   const composeReducer = compose(
     connectRouter(history),
   )
+  const sagaMiddleware = createSagaMiddleware()
   const middlewares = [
+    sagaMiddleware,
     routerMiddleware(history),
   ]
   const enhancers = [applyMiddleware(...middlewares)]
@@ -39,6 +46,7 @@ export default function configureStore(initialState = {}, history) {
     composeEnhancers(...enhancers),
   )
   const persistor = persistStore(store)
+  sagaMiddleware.run(sagas)
   return {
     store,
     persistor,

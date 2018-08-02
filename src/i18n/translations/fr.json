@@ -1,5 +1,7 @@
 {
   "components.CurrentDate.week": "Semaine {weekNumber}",
   "pages.HomePage.title": "Bienvenue",
-  "pages.HomePage.subtitle": "Quelques informations importantes seront écrites ici"
+  "pages.HomePage.subtitle": "Quelques informations importantes seront écrites ici",
+  "pages.HomePage.city": "Ville",
+  "pages.HomePage.temperature": "Température"
 }

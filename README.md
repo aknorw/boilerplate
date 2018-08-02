@@ -28,6 +28,7 @@
 
 * [`React`](https://github.com/facebook/react)
 * [`Redux`](https://github.com/reduxjs/redux) and [`React-Redux`](https://github.com/reduxjs/react-redux) to manage the state
+* [`Redux-Saga`](https://github.com/redux-saga/redux-saga) to handle all of the side effects logic in a central place
 * [`Reselect`](https://github.com/reduxjs/reselect) to build memoized selectors
 * [`Styled-Components`](https://github.com/styled-components/styled-components) to write CSS-in-JS
 * [`React-Router`](https://github.com/ReactTraining/react-router) to manage routes and [`Connected-React-Router`](https://github.com/supasate/connected-react-router) to sync history with `redux`
@@ -219,6 +220,7 @@ src/services/
       selectors.test.js
     actions.js    # named exports of action creators
     reducer.js    # default export reducer
+    saga.js       # named exports of sagas
     selectors.js  # named exports of selectors
     types.js      # named exports of action types constants
 ````
@@ -226,6 +228,9 @@ src/services/
 #### Reducers
 
 **Keep reducers pure, with no side-effects**: reducers should be pure functions. Redux works on the assumption that your state is immutable; and a reducer is intended to accept a state along with an action and return a new state (or the exact same state if nothing has changed).
+
+@TODO: WRITE ABOUT SAGA
+Side effects should be handled in sagas
 
 #### Action creators
 
@@ -624,6 +629,10 @@ describe('actions', () => {
 })
 ````
 
+**Sagas**
+
+@TODO: DOCS ABOUT SAGAS TESTING
+
 **Selectors**
 
 ````js
@@ -676,6 +685,7 @@ describe('selectors', () => {
 
 Sources:
 * [Redux - Writing tests](https://redux.js.org/recipes/writingtests)
+* [How to Manage Side Effects with Redux-Saga](https://www.lullabot.com/articles/eat-this-its-safe)
 * [Unit testing React, Redux, Selectors and Epics](https://codeburst.io/unit-testing-react-redux-selectors-and-epics-664e7b4798a8)
 
 #### UI Testing
