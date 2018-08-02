@@ -15,7 +15,7 @@ import 'styles'
 
 // i18n related stuff
 import LanguageProvider from 'containers/LanguageProvider'
-import { translationMessages } from './i18n'
+import { translationMessages } from 'i18n'
 
 const initialState = {}
 const history = createHistory()

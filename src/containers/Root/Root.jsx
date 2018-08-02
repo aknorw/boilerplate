@@ -13,10 +13,8 @@ import routes from 'pages'
 
 import { RootWrapper, SwitchWrapper } from './components/Layout'
 import TopBar from './components/TopBar'
+import CurrentDate from './components/CurrentDate'
 import LanguageSwitcher from './components/LanguageSwitcher'
-
-// This is temporary
-const today = new Intl.DateTimeFormat().format(new Date())
 
 export const Root = ({ currentLocale, availableLocales, handleLanguageSwitch }) => (
   <RootWrapper>
@@ -28,8 +26,8 @@ export const Root = ({ currentLocale, availableLocales, handleLanguageSwitch }) 
     </Helmet>
     <TopBar
       title={APP_NAME}
-      date={today}
     >
+      <CurrentDate currentLocale={currentLocale} />
       <LanguageSwitcher
         currentLocale={currentLocale}
         availableLocales={availableLocales}

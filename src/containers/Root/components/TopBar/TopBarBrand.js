@@ -15,6 +15,6 @@ export default styled(Link)`
   text-transform: uppercase;
   transition: color ${variables.transition.defaultDuration}s ${variables.transition.defaultFunction};
   &:hover {
-    color: ${darken(0.1, variables.colors.grayLightest)}
+    color: ${darken(0.2, variables.colors.grayLightest)}
   }
 `

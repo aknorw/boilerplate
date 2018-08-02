@@ -13,6 +13,9 @@ module.exports = {
   snapshotSerializers: [
     'enzyme-to-json/serializer',
   ],
+  transformIgnorePatterns: [
+    '<rootDir>/node_modules/(?!date-fns)',
+  ],
   collectCoverage: true,
   collectCoverageFrom: [
     '**/*.{js,jsx}',

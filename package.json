@@ -19,6 +19,7 @@
   "dependencies": {
     "connected-react-router": "^4.3.0",
     "cross-env": "^5.2.0",
+    "date-fns": "^2.0.0-alpha.16",
     "dotenv": "^6.0.0",
     "history": "^4.7.2",
     "polished": "^1.9.3",

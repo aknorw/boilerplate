@@ -3,25 +3,21 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 
-import TopBar from '../TopBar'
+import CurrentDate from '../CurrentDate'
 
 console.error = jest.fn()
 
-describe('<TopBar />', () => {
+describe('<CurrentDate />', () => {
   it('should be defined', () => {
-    expect(TopBar).toBeDefined()
+    expect(CurrentDate).toBeDefined()
   })
   it('should log 1 error when no props are passed', () => {
-    shallow(<TopBar />)
+    shallow(<CurrentDate />)
     expect(console.error).toHaveBeenCalledTimes(1)
   })
   it('should render correctly', () => {
     const tree = shallow(
-      <TopBar title="Test">
-        <div>
-          Some additional information here
-        </div>
-      </TopBar>,
+      <CurrentDate currentLocale="en" />,
     )
     expect(tree).toMatchSnapshot()
   })

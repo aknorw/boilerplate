@@ -9,6 +9,6 @@ export default styled.span`
   text-transform: capitalize;
   transition: color ${variables.transition.defaultDuration}s ${variables.transition.defaultFunction};
   &:hover {
-    color: ${({ isActive }) => !isActive && darken(0.1, variables.colors.grayLightest)}
+    color: ${({ isActive }) => !isActive && darken(0.2, variables.colors.grayLightest)}
   }
 `

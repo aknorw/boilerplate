@@ -35,6 +35,7 @@
 * [`React-Loadable`](https://github.com/jamiebuilds/react-loadable) to load components with dynamic imports (code-splitting made simple)
 * [`React-Helmet`](https://github.com/nfl/react-helmet) to manage head tags easily
 * [`React-Intl`](https://github.com/yahoo/react-intl) to translate the app
+* [`date-fns`](https://github.com/date-fns/date-fns) to work with dates and times
 
 ## Scripts
 
