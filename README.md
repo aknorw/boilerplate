@@ -7,16 +7,29 @@
 * [Guidelines](#guidelines)
   * [Folders organization](#folders-organization)
   * [Components](#components)
+    * [Container components](#container-components)
+    * [Presentational components](#presentational-components)
   * [Redux](#redux)
+    * [Reducers](#reducers)
+    * [Action creators](#action-creators)
+    * [Action types](#action-types)
+    * [Sagas](#sagas)
+    * [Selectors](#selectors)
   * [Routing](#routing)
+    * [Routes configuration](#routes-configuration)
+    * [Code splitting](#code-splitting)
   * [i18n](#i18n)
   * [Utilities](#utilities)
   * [Naming things](#naming-things)
+    * [General](#general)
+    * [Event and event handlers](#event-and-event-handlers)
 * [Development](#development)
   * Logging :construction:
   * [Type checking](#type-checking)
   * [Linting](#linting)
   * [Testing](#testing)
+    * [Unit Testing](#unit-testing)
+    * [UI Testing](#ui-testing)
   * [Transpiling](#transpiling)
   * Building :construction:
   * Continuous Integration / Continuous Development :construction:
@@ -95,7 +108,7 @@ These component folders could even potentially contain sub-component folders org
 ````
 src/
   components/
-    Button/
+    Button/                           # Button is a Presentational component used in many components
       tests/
         Button.test.jsx
       Button.jsx
@@ -106,19 +119,18 @@ src/
   containers/
     Root/
       components/
-        Layout/
-          tests/
+        Layout/                       # Layout contains components only used in the <Root /> container
+          tests/                      # test files for these components
             RootWrapper.test.jsx
             SwitchWrapper.test.jsx
-          index.js
+          index.js                    # rollup file (exports RootWrapper and SwitchWrapper)
           RootWrapper.jsx
           SwitchWrapper.js
-        Navbar/
-          ...
+        ...
       tests/
-        Root.test.jsx
-      index.js
-      Root.jsx
+        Root.test.jsx                 # test file for the container
+      index.js                        # rollup file
+      Root.jsx                        # actual container
     ...
 ````
 
@@ -136,7 +148,7 @@ For every component, you should follow some basic rules:
 
 * **One per file**: You should try to put each component in its own file to ensure they are easier to read, maintain and test.
 
-* **Declare `propTypes` and `defaultProps`**: propTypes are a form of documentation, and providing defaultProps means the reader of your code doesn’t have to assume as much.
+* **Declare `propTypes` and `defaultProps`** (when needed): propTypes are a form of documentation, and providing defaultProps means the reader of your code doesn’t have to assume as much.
 
 Components name should follow pascal case (eg. `CommentList`).
 
@@ -150,7 +162,7 @@ Components name should follow pascal case (eg. `CommentList`).
 
 * Call Redux actions and provide these as callbacks to the presentational components
 
-For testing purposes, **export both the connected** (as default) **and non-connected component** (as named export).
+For testing purposes, **export both the connected** (as default) **and non-connected component** (as named export) - see the [Testing](#testing) section.
 
 #### Presentational components
 
@@ -170,7 +182,7 @@ For testing purposes, **export both the connected** (as default) **and non-conne
 
 * Should be written as functional components unless they need state, lifecycle hooks, or performance optimizations
 
-Presentational components should be styled using `styled-components`:
+**Presentational components should be styled using `styled-components`**:
 
 ````js
 // src/components/Button/Button.jsx
@@ -207,7 +219,7 @@ export default Button
 
 ### Redux
 
-**Co-locate reducers, actions, action types and selectors**: organizing your redux related code around the reducer (*the slice of store state it manages*) by bundling your actions, action types and selectors with the reducer helps organize your code into reusable modules.
+**Co-locate reducers, actions, action types, sagas and selectors**: organizing your redux related code around the reducer (*the slice of store state it manages*) by bundling your actions, action types, sagas and selectors with the reducer helps organize your code into reusable modules.
 
 A redux module should be organized as follows:
 
@@ -217,6 +229,7 @@ src/services/
     tests/
       actions.test.js
       reducer.test.js
+      saga.test.js
       selectors.test.js
     actions.js    # named exports of action creators
     reducer.js    # default export reducer
@@ -229,8 +242,7 @@ src/services/
 
 **Keep reducers pure, with no side-effects**: reducers should be pure functions. Redux works on the assumption that your state is immutable; and a reducer is intended to accept a state along with an action and return a new state (or the exact same state if nothing has changed).
 
-@TODO: WRITE ABOUT SAGA
-Side effects should be handled in sagas
+Side-effects (ie. asynchronous things like data fetching) should be handled with [`Redux-Saga`](https://github.com/redux-saga/redux-saga) - see below for more information.
 
 #### Action creators
 
@@ -248,6 +260,131 @@ Using a prefix for the action types based on the reducer they work with is a goo
 export const FOO_UPDATE = '@@basic/FOO_UPDATE'
 ````
 
+#### Sagas
+
+To manage side effects in `Redux`, most tutorials use [`Redux-Thunk`](https://github.com/reduxjs/redux-thunk), which is a middleware allowing to write action creators that return a function instead of an action.
+
+So why does this boilerplate use `Redux-Saga`?
+
+> Contrary to redux thunk, you don't end up in callback hell, you can test your asynchronous flows easily and your actions stay pure.
+
+Similar to regular reducers, sagas are functions that listen for dispatched actions. Additionally, they perform side effects and return their own actions back to a normal reducer.
+
+By intercepting actions that cause side effects and handling them in their own way, we maintain the purity of reducers. This implementation uses generators, which allows us to write asynchronous code that reads like synchronous one. We don't need to worry about callbacks or race conditions since the generator function will automatically pause on each `yield` statement until complete before continuing.
+
+Sagas consist in *workers* and *watchers* (which are both generator functions):
+* Workers are responsible for *calling* asynchronous functions and *putting* new actions back to the reducer
+* Watchers *watch* for dispatched actions and call the appropriate worker
+
+Supposing we have the following types and actions to fetch some user data from a remote server:
+
+````js
+// src/services/users/types.js
+
+export const USER_FETCH = '@@user/USER_FETCH'
+export const SUCCESS_USER_FETCH = '@@user/SUCCESS_USER_FETCH'
+export const FAILURE_USER_FETCH = '@@user/FAILURE_USER_FETCH'
+````
+
+````js
+// src/services/users/actions.js
+
+import * as types from './types'
+
+export const fetchUser = () => ({
+  type: types.USER_FETCH,
+})
+
+export const fetchUserSuccess = user => ({
+  type: types.SUCCESS_USER_FETCH,
+  user,
+})
+
+export const fetchUserFailure = error => ({
+  type: types.FAILURE_USER_FETCH,
+  error,
+})
+````
+
+We can create a saga that watches for all `USER_FETCH` and triggers an API call to fetch the user data:
+
+````js
+// src/services/user/saga.js
+
+import { call, put, takeEvery } from 'redux-saga/effects'
+
+import callAPI from '...'
+
+import * as actions from './actions'
+import * as types from './types'
+
+// Worker saga
+export function* fetchUserWorker(action) {
+  try {
+    const user = yield call(callAPI.fetchUser, action.userId)
+    // The following line dispatch a new action to the reducer
+    yield put(actions.fetchUserSuccess(user))
+  } catch (error) {
+    // The following line dispatch a new action to the reducer
+    yield put(actions.fetchUserFailure(error))
+  }
+}
+
+// Watcher saga
+// Every time types.USER_FETCH will be dispatched, fetchUserWorker will be started
+export function* fetchUserWatcher() {
+  yield takeEvery(types.USER_FETCH, fetchUserWorker)
+}
+````
+
+This way, the reducer stays pure:
+
+````js
+// src/services/user/reducer.js
+
+import * as types from './types'
+
+export const initialState = {
+  user: {},
+  isLoading: false,
+  error: null,
+}
+
+const userReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case types.USER_FETCH:
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      }
+    case types.SUCCESS_USER_FETCH:
+      return {
+        ...state,
+        user: action.user,
+        isLoading: false,
+        error: null,
+      }
+    case types.FAILURE_USER_FETCH:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
+      }
+    default:
+      return state
+  }
+}
+
+export default userReducer
+````
+
+To ensure clarity of your code, you should follow some basic rules when creating sagas:
+
+* **Append *Worker* and *Watcher* at the end of sagas names** (eg. `fetchUserWorker`, `fetchUserWatcher`)
+* **Dispatch actions imported from `./actions.js`** rather than creating them in sagas (ie. do not write `yield put({ type: types.FETCH_USER, user })`)
+* Export both workers and watchers as **named exports**
+
 #### Selectors
 
 Selectors should be written in camel case and begin with *select* (eg. `selectCurrentUser`).
@@ -258,7 +395,7 @@ Selectors should be written in camel case and begin with *select* (eg. `selectCu
 
 Routing is done with [`React-Router` v4](https://github.com/ReactTraining/react-router) which allows using React components.
 
-Every route, or *page*, should be defined as a new folder in the `src/pages/` folder. As explained in the [Components](#components) section, pages are just Container components used as router entrypoints.
+**Every route, or *page*, should be defined as a new folder in the `src/pages/` folder**. As explained in the [Components](#components) section, pages are just Container components used as router entrypoints.
 
 ````
 src/
@@ -325,7 +462,7 @@ const routesConfig = [
 
 To code-split the app automatically, this boilerplate uses [`react-loadable`](https://github.com/jamiebuilds/react-loadable).
 
-Everytime you want to add a new route (or a subroute), you should default export the Loadable component and import it in the route configuration. To make this step smoothier, just use the `createAsyncComponent` utility function.
+Everytime you want to add a new route (or a subroute), **you should default export the Loadable component and import it in the route configuration**. To make this step smoothier, just use the `createAsyncComponent` utility function.
 
 ````js
 // src/utils/createAsyncComponent.js
@@ -352,7 +489,7 @@ export default createAsyncComponent({
 })
 ````
 
-To make chunk names prettier (and readable), you should use the *webpack magic comment* in the import function: `/* webpackChunkName: 'settings' */`.
+To make chunk names prettier (and readable), **you should use the *webpack magic comment* in the import function**: `/* webpackChunkName: 'settings' */`.
 
 ### i18n
 
@@ -360,7 +497,7 @@ Internationalization is handled by [`react-intl`](https://github.com/yahoo/react
 
 Instead of using `<IntlProvider />` from the package, we use a custom provider named `<LanguageProvider />` which is basically the same component but **connected** to the store. This way, you are able to dispatch an action to change the locale of the whole app.
 
-For every component that contain strings to be translated, you should create a file named `messages.js` at the root of the folder.
+For every component that contain strings to be translated, **you should create a file named `messages.js` at the root of the folder**.
 
 ````js
 // src/pages/Dashboard/messages.js
@@ -395,7 +532,7 @@ import messages from './messages'
 ...
 ````
 
-Translations files must be located in the `src/i18n/translations/` folder, named after their language.
+**Translations files must be located in the `src/i18n/translations/` folder, named after their language**:
 
 ````js
 // src/i18n/translations/fr.json
@@ -460,7 +597,7 @@ As unit tests are not just about components, **almost every folder in the `src` 
 
 To run the tests, just type `yarn test` in the terminal. When all tests are run, you will see a coverage report that may help you implement other tests.
 
-##### Components
+**Testing components**
 
 Assuming we have a Presentational Component named `Button` in `src/components/Button`, here's how to write a basic test to check if it's defined, if it's rendering correctly, if `styled-components` did its job, and if the `click` event is called:
 
@@ -519,29 +656,9 @@ import { Root } from '../Root' // We import the component itself, not the connec
 ...
 ````
 
-**Differences between `mount`, `shallow` and `render`**
+**Testing Redux related stuff**
 
-* `mount` renders child components
-  * This is ideal for use cases where you have components that may interact with DOM API, or use React lifecycles methods in order to fully test the component
-  * As it actually mounts the component in the DOM `.unmount()` should be called after each tests to stop tests affecting each other
-  * Allows access to both props directly passed into the root component (including default props) and props passed into child components
-
-
-* `shallow` renders only the single component, not including its children
-  * This is useful to isolate the component for pure unit testing. It protects against changes or bugs in a child component altering the behaviour or output of the component under test
-  * Components do have access to lifecycle methods by default (Enzyme 3)
-  * Cannot access props passed into the root component (therefore also not default props), but can those passed into child components, and can test the effect of props passed into the root component. This is as with `shallow(<MyComponent />)`, you're testing what `MyComponent` renders - not the element you passed into `shallow`
-
-
-* `render` renders to static HTML, including children
-  * Does not have access to React lifecycle methods
-  * Less costly than `mount` but provides less functionality
-
-Source: [Testing React with Jest and Enzyme](https://medium.com/codeclan/testing-react-with-jest-and-enzyme-20505fec4675)
-
-##### Redux
-
-**Reducers**
+*Reducers*
 
 A reducer should return the new state after applying the action to the previous state.
 
@@ -596,7 +713,7 @@ describe('reducer', () => {
 })
 ````
 
-**Action creators**
+*Action creators*
 
 When testing action creators, we want to test whether the correct action creator was called and also whether the right action was returned.
 
@@ -629,11 +746,70 @@ describe('actions', () => {
 })
 ````
 
-**Sagas**
+*Sagas*
 
-@TODO: DOCS ABOUT SAGAS TESTING
+A nice benefit of using `Redux-Saga` and generator functions is that our async code becomes less complicated to test. We don't need to worry about mocking API services since all we care about are the action objects that our sagas output.
 
-**Selectors**
+Let's use the worker saga used in the Guidelines section:
+
+````js
+...
+
+// Worker saga
+export function* fetchUserWorker(action) {
+  try {
+    const user = yield call(callAPI.fetchUser, action.userId)
+    // The following line dispatch a new action to the reducer
+    yield put(actions.fetchUserSuccess(user))
+  } catch (error) {
+    // The following line dispatch a new action to the reducer
+    yield put(actions.fetchUserFailure(error))
+  }
+}
+
+...
+````
+
+This saga could be tested like:
+
+````js
+import { call, put } from 'redux-saga/effects'
+
+import callAPI from '...'
+import { fetchUserWorker } from '../saga'
+import * as types from '../types'
+
+describe('saga', () => {
+  const gen = fetchUserWorker()
+  it('should call the  API', () => {
+    expect(gen.next().value).toEqual(call(callAPI))
+  })
+  it('should dispatch a fetchUserSuccess action if successful', () => {
+    const user = {
+      userId: 1337,
+      username: 'Foo',
+    }
+    expect(gen.next(user).value).toEqual(put({
+      type: types.SUCCESS_USER_FETCH,
+      user,
+    }))
+  })
+  it('should dispatch a fetchUserFailure if unsuccessful', () => {
+    const error = {
+      text: 'Something went wrong!',
+    }
+    expect(gen.throw(error).value).toEqual(put({
+      type: types.FAILURE_USER_FETCH,
+      error,
+    }))
+  })
+  it('should be done', () => {
+    expect(gen.next().done).toEqual(true)
+  })
+})
+````
+
+*Selectors*
 
 ````js
 import { createSelector } from 'reselect'
@@ -733,6 +909,8 @@ This boilerplate uses [Babel](https://babeljs.io/) to transpile ES6/ES7 code to 
 
 * `module-resolver` to add new "root" directories that contain modules (ie. write `components/Button` instead of `../../../components/Button`)
 
+* `polished` to compile away polished helpers
+
 * `react-hot-loader/babel` to make React components work with Hot Module Reloading [*development only*]
 
 * `styled-components`
@@ -742,6 +920,8 @@ This boilerplate uses [Babel](https://babeljs.io/) to transpile ES6/ES7 code to 
 * `transform-class-properties` to drop class constructors thanks to property initializer and `.bind(this)` thanks to lexical scoping of fat arrow functions
 
 * `transform-object-rest-spread`
+
+* `transform-runtime` to transform generator functions to use a regenerator runtime that does not pollute the global scope (for `redux-saga`)
 
 ## Version control
 
