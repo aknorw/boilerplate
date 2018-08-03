@@ -9,7 +9,11 @@
     "jest": true
   },
   "extends": [
-    "airbnb"
+    "airbnb",
+    "plugin:redux-saga/recommended"
+  ],
+  "plugins": [
+    "redux-saga"
   ],
   "rules": {
     "semi": [2, "never"],
