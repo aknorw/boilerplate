@@ -1,5 +1,3 @@
-/* eslint-disable redux-saga/no-unhandled-errors */
-
 import { call, put } from 'redux-saga/effects'
 
 import { fetchWeatherWorker, callOWMAPI } from '../saga'
