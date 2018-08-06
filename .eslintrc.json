@@ -23,7 +23,10 @@
     "react/forbid-prop-types": 0
   },
   "overrides": [{
-    "files": "**/*.stories.{js,jsx}",
+    "files": [
+      "**/*.stories.{js,jsx}",
+      "webpack/*.js"
+    ],
     "rules": {
       "import/no-extraneous-dependencies": 0
     }
