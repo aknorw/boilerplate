@@ -39,3 +39,8 @@ const wrapApp = (Component, reduxStore, messages) => (
 // @TODO: Intl polyfill
 
 render(wrapApp(Root, store, translationMessages), MOUNT_NODE)
+
+if (process.env.NODE_ENV === 'production') {
+  // eslint-disable-next-line global-require, import/no-extraneous-dependencies
+  require('offline-plugin/runtime').install()
+}

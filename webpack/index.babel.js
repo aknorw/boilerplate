@@ -2,6 +2,7 @@ import { resolve } from 'path'
 import webpack from 'webpack'
 import merge from 'webpack-merge'
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin'
+import OfflinePlugin from 'offline-plugin'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 
 import commons from './commons'
@@ -32,6 +33,11 @@ const prodConfig = {
     chunkFilename: '[name].[chunkhash].js',
   },
   plugins: [
+    new webpack.NoEmitOnErrorsPlugin(),
+    new OfflinePlugin({
+      publicPath: '/',
+      appShell: '/',
+    }),
     new BundleAnalyzerPlugin(),
   ],
   optimization: {
