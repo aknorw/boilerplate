@@ -62,6 +62,7 @@ Script | Explanation
 `yarn test` | Run tests
 `yarn storybook` | Run the storybook on port 9001
 `yarn dev` | Run application (HMR)
+`yarn extract:msg` | Extract `react-intl` messages
 `yarn build` | Build application
 
 ## Guidelines
@@ -542,6 +543,14 @@ import messages from './messages'
   "pages.HomePage.subtitle": "Quelques informations importantes seront écrites ici"
 }
 ````
+
+In order to make this process as smooth as possible, **you can use a script to automatically extract all defined messages**:
+
+````
+yarn extract:msg
+````
+
+This script will search for messages in the `src/` directory, check if they do not exist and update the translation files. `defaultMessage` is automatically saved as the default language (in this boilerplate, English).
 
 ### Utilities
 
